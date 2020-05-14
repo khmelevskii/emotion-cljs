@@ -3,7 +3,8 @@
   <h1 align="center">emotion-cljs</h1>
 </p>
 <p align="center" style="font-size: 1.2rem;"> 
-  Tiny ClojureScript interface for [Emotion](https://github.com/emotion-js/emotion)
+  ClojureScript interface for <a href="https://github.com/emotion-js/emotion" target="_blank">Emotion</a>
+  <br>
   (The Next Generation of CSS-in-JS)
 </p>
 
