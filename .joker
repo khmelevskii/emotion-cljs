@@ -1,0 +1,8 @@
+{:ignored-unused-namespaces [emotion.util]
+ :known-macros [cljs.core
+                atomics.core/defatom
+                emotion.core/defcss
+                emotion.core/defcss-when
+                emotion.core/defstyled
+                emotion.core/defkeyframes
+                emotion.core/defwithc]}
