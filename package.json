@@ -11,11 +11,11 @@
     },
     "homepage": "https://github.com/khmelevskii/emotion-cljs#readme",
     "devDependencies": {
-        "@babel/core": "^7.9.6",
+        "@babel/core": "^7.10.2",
         "@emotion/cache": "^10.0.29",
         "create-emotion-server": "^10.0.27",
         "emotion": "^10.0.27",
-        "shadow-cljs": "2.9.3"
+        "shadow-cljs": "2.10.4"
     },
     "dependencies": {
         "@emotion/core": "^10.0.28",
