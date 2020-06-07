@@ -2,15 +2,24 @@
   (:require
    [clojure.string :as string]))
 
-(defn- kwd->camel-case
+(defn string->camel-case
+  "Returns camel case version of the string, e.g. \"font-size\"
+  becomes \"fontSize\"."
+  [value]
+  (let [[first-word & words] (string/split value #"-")]
+    (if (or (= first-word "data")
+            (= first-word "area"))
+      value
+      (-> (map string/capitalize words)
+          (conj first-word)
+          string/join))))
+
+(defn kwd->camel-case
   "Returns camel case version of the keyword, e.g. :font-size
   becomes \"fontSize\"."
   [value]
   (if (keyword? value)
-    (let [[first-word & words] (string/split (name value) #"-")]
-      (-> (map string/capitalize words)
-          (conj first-word)
-          string/join))
+    (string->camel-case (name value))
     value))
 
 (defn map->camel-map

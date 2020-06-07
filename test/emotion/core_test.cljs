@@ -138,7 +138,7 @@
           :css  ".css-r3ulpn{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-r3ulpn:hover{color:green;}.css-r3ulpn:focus{color:blue;}"})
       "Render active styled header component with styles and css.")
 
-  (is (= (helpers/render-component <wrap> {:className "test-class"})
+  (is (= (helpers/render-component <wrap> {:class-name "test-class"})
          {:html "<div class=\"test-class css-tokvmb\"></div>"
           :ids  ["tokvmb"]
           :css  ".css-tokvmb{color:red;}"})
@@ -180,6 +180,6 @@
          {:html "<h1 class=\"css-r3ulpn\"></h1>"
           :ids  ["r3ulpn"]
           :css  ".css-r3ulpn{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-r3ulpn:hover{color:green;}.css-r3ulpn:focus{color:blue;}"})
-      "Rennder styled component with change component"))
+      "Render styled component with change component"))
 
 ;; Global
