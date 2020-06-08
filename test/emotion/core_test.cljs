@@ -142,7 +142,19 @@
          {:html "<div class=\"test-class css-tokvmb\"></div>"
           :ids  ["tokvmb"]
           :css  ".css-tokvmb{color:red;}"})
-      "Render styled component with passing class")
+      "Render styled component with passing class using `class-name` prop")
+
+  (is (= (helpers/render-component <wrap> {:className "test-class"})
+         {:html "<div class=\"test-class css-tokvmb\"></div>"
+          :ids  ["tokvmb"]
+          :css  ".css-tokvmb{color:red;}"})
+      "Render styled component with passing class using `className` prop")
+
+  (is (= (helpers/render-component <wrap> {:class "test-class"})
+         {:html "<div class=\"test-class css-tokvmb\"></div>"
+          :ids  ["tokvmb"]
+          :css  ".css-tokvmb{color:red;}"})
+      "Render styled component with passing class using `class` prop")
 
   (is (= (helpers/render-component <wrap> {:css {:display :inline}})
          {:html "<div class=\"css-x06tq5\"></div>"

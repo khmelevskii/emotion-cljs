@@ -13,6 +13,7 @@
 (def ^:private styled-component (.-default styled))
 (def ^:private prop-valid? (.-default is-prop-valid))
 
+(def ^:private valid-class-props #{"class-name" "className" "class"})
 (def ^:private emotion-class-prop "className")
 (def ^:private class-prop "class-name")
 
@@ -36,9 +37,14 @@
   [props]
   (.reduce (.keys js/Object props)
            (fn [acc prop-name]
-             (let [new-prop-name (if (.includes p/camel-props prop-name)
+             (let [new-prop-name (cond
+                                   ;; class props
+                                   (valid-class-props prop-name)
+                                   emotion-class-prop
+                                   ;; camelCase props
+                                   (.includes p/camel-props prop-name)
                                    (util/string->camel-case prop-name)
-                                   prop-name)]
+                                   :else prop-name)]
                (when (prop-valid? new-prop-name)
                  (let [prop-value (aget props prop-name)
                        prop-value (if (and (= new-prop-name emotion-class-prop)
@@ -49,13 +55,13 @@
              acc) #js{}))
 
 (defn- convert-class-name
-  "Get component properties with className which converted to
-  `class-name` kebab-case style."
+  "Convert component properties with `className` or `class` which
+  will converted to `class-name` kebab-case style."
   [props]
   (.reduce
    (.keys js/Object props)
    (fn [acc prop-name]
-     (let [new-prop-name (if (= prop-name emotion-class-prop)
+     (let [new-prop-name (if (valid-class-props prop-name)
                            class-prop
                            prop-name)]
        (aset acc new-prop-name (aget props prop-name)))
