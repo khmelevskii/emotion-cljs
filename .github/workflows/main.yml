@@ -23,6 +23,10 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
+
+    - name: Setup Clojure
+      uses: DeLaGuardo/setup-clojure@2.0
+
     - name: Setup Node.js environment
       uses: actions/setup-node@v1.4.2
 
