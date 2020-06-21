@@ -15,7 +15,7 @@
 
 (def ^:private valid-class-props #{"class-name" "className" "class"})
 (def ^:private emotion-class-prop "className")
-(def ^:private class-prop "class-name")
+(def ^:private default-class-prop "class-name")
 
 (defn- html-tag?
   "Simple check that component which we need to styled is a simple html tag."
@@ -57,25 +57,33 @@
 (defn- convert-class-name
   "Convert component properties with `className` or `class` which
   will converted to `class-name` kebab-case style."
-  [props]
-  (.reduce
-   (.keys js/Object props)
-   (fn [acc prop-name]
-     (let [new-prop-name (if (valid-class-props prop-name)
-                           class-prop
-                           prop-name)]
-       (aset acc new-prop-name (aget props prop-name)))
-     acc) #js {}))
+  ([props]
+   (convert-class-name props default-class-prop))
+  ([props class-name-prop]
+   (.reduce
+    (.keys js/Object props)
+    (fn [acc prop-name]
+      (let [new-prop-name (if (valid-class-props prop-name)
+                            class-name-prop
+                            prop-name)]
+        (aset acc new-prop-name (aget props prop-name)))
+      acc) #js {})))
 
 (defn- create-styled [display-name component options styles]
   "Create styled component."
-  (let [wrapper-component
+  (let [camel-casing-props? (get options "camelCasingProps?" true)
+        class-name-prop     (name (get options "classNameProp"
+                                       default-class-prop))
+        wrapper-component
         (cond
-          (emotion? component)  component
-          (html-tag? component) #(create-element component
-                                                 (object->camel-props %))
-          :else                 #(create-element component
-                                                 (convert-class-name %)))]
+          (not camel-casing-props?) component
+          (emotion? component)      component
+          (html-tag? component)     #(create-element component
+                                                     (object->camel-props %))
+          (= class-name-prop
+             emotion-class-prop)    component
+          :else                     #(create-element component
+                                                     (convert-class-name % class-name-prop)))]
     (aset wrapper-component "displayName"
           (styled-display-name display-name))
     ((styled-component wrapper-component (->js options))

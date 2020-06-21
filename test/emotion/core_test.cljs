@@ -1,9 +1,20 @@
 (ns emotion.core-test
   (:require
+   ["react" :as react]
+   [cljs-bean.core :refer [->clj]]
    [cljs.test :refer [deftest is]]
    [emotion.core :refer [defcss defcss-when defstyled let-css
                          defkeyframes defwithc Global]]
    [emotion.helpers :as helpers]))
+
+(def test-component
+  (fn [props]
+    (react/createElement "div" props)))
+
+(def test-component-with-class-prop
+  (fn [props]
+    (react/createElement "div"
+                         #js {:className (:class (->clj props))})))
 
 (def font-face :sans-serif)
 
@@ -61,6 +72,21 @@
 (defstyled <with-forward>
   [:div
    {:should-forward-prop (fn [] false)}]
+  {})
+
+(defstyled <with-className-prop>
+  [test-component
+   {:class-name-prop :className}]
+  {})
+
+(defstyled <with-class-prop>
+  [test-component-with-class-prop
+   {:class-name-prop :class}]
+  {})
+
+(defstyled <without-camel-casing-props>
+  [test-component
+   {:camel-casing-props? false}]
   {})
 
 (defcss css-with-let []
@@ -175,7 +201,32 @@
          {:html "<div class=\"css-0\"></div>"
           :ids  ["0"]
           :css  ""})
-      "Render styled component custom forward prop function"))
+      "Render styled component with custom forward prop function")
+
+  (is (= (helpers/render-component
+          <with-className-prop>
+          {})
+         {:html "<div class=\"css-0\"></div>"
+          :ids  ["0"]
+          :css  ""})
+      "Render styled component with className prop")
+
+  (is (= (helpers/render-component
+          <with-class-prop>
+          {})
+         {:html "<div class=\"css-0\"></div>"
+          :ids  ["0"]
+          :css  ""})
+      "Render styled component with class prop")
+
+  (is (= (helpers/render-component
+          <without-camel-casing-props>
+          {:autoFocus true
+           :className "test"})
+         {:html "<div autofocus=\"\" class=\"test css-0\"></div>"
+          :ids  ["0"]
+          :css  ""})
+      "Render styled component without camel casing props"))
 
 (deftest letcss
   (is (= (helpers/render-styles css-with-let)
