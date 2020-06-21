@@ -23,6 +23,15 @@ Emotion is a great CSS-IN-JS solution in JavaScript. emotion-cljs library provid
 
 ## Documentation
 
+### Installation
+This library will require `@emotion/core` and `@emotion/styled` from node_modules:
+```bash
+yarn add @emotion/core @emotion/styled
+# or
+npm i @emotion/core @emotion/styled
+```
+
+
 ### `defstyled`
 `defstyled` macro expands into `@emotion/styled` and is used for creating React components that have styles attached to them.
 
@@ -175,10 +184,59 @@ Example with helix:
 ($ Global reset-styles global-styles)
 ```
 
+
 ### Passing className
-You are able to pass className prop to styled component using the following props:
-`:class-name`, `:class` or `:className`. All of them will convert to `className`
-when will pass to React component.
+By default `emption-cljs` allows to use the following className props: `:class-name`, `:class` or `:className`. These
+props will be converted to `:class-name` when passing into React component, and converted to `:className`
+when passing to tag component.
+If you need to pass `:className` prop to React component, you should use `:class-name-prop` option. 
+For example you need to pass `:className` prop when using native React component.
+`:class-name-prop` allows next values: `:class-name` (default), `:class` or `:className`. 
+
+Example with material-ui:
+```clojure
+[emotion.core :refer [defstyled]]
+["@material-ui/core/Button" :default muiButton]
+...
+(defstyled Button
+  [muiButton {:class-name-prop :className}]
+  {:font-size 14})
+```
+
+If you need to change default className prop, custom `defstyled` macro should be created.
+
+For example:
+```clojure
+(defmacro defstyled [sym component & styles]
+  (let [[component
+         options] (if (sequential? component) component [component])
+        options   (assoc options :class-name-prop :className)]
+    `(emotion-cljs.core/defstyled ~sym [~component ~options]
+       ~@styles)))
+```
+
+
+### Convert props to camelCase
+By default `emotion-cljs` converts kebab-case props to camelCase when passing them to tag component.
+For example, `:auto-focus`, `:on-click`, `:class-name` props will be converted into `:autoFocus`, `:onClick`, `:className`.
+If you want to disable this behaviour and use camelCase props in your components, you are able to do it by passing
+`:camel-casing-props? false` option.
+
+For example:
+```clojure
+[emotion.core :refer [defstyled]]
+["@material-ui/core/Button" :default muiButton]
+...
+(defstyled Button
+  [muiButton {:camel-casing-props? false}]
+  {:font-size 14})
+```
+
+If you need to disable camel casing props by default, you should create custom `defstyled` macro described above.
+
+Also after disabling camel casing props, `emotion-cljs` will become a little bit faster, because there is no need in
+additional transformations and components wrapping.
+
 
 ### Complex real world example
 ```clojure
@@ -217,6 +275,7 @@ when will pass to React component.
   --secondary
   --loading)
 ```
+
 
 ## Roadmap
 * Targeting another emotion component. https://emotion.sh/docs/styled#targeting-another-emotion-component
