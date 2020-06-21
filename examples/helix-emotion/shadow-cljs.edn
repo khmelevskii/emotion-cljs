@@ -1,0 +1,16 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src/dev"
+  "src/main"
+  "src/test"
+  "node_modules"]
+
+ :dependencies
+ [[lilactown/helix "0.0.12"]
+  [emotion-cljs "0.1.2"]]
+
+ :dev-http {8080 "public"}
+ :builds
+ {:frontend
+  {:target  :browser
+   :modules {:main {:init-fn helix-emotion.app/init}}}}}
