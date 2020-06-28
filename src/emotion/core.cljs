@@ -10,6 +10,7 @@
    [emotion.util :as util]))
 
 (def ^:private create-element react/createElement)
+(def ^:private forward-ref react/forwardRef)
 (def ^:private styled-component (.-default styled))
 (def ^:private prop-valid? (.-default is-prop-valid))
 
@@ -54,6 +55,16 @@
                    (aset acc new-prop-name prop-value))))
              acc) #js{}))
 
+(defn- create-forwarded-element
+  "Create React component wrapped with React.forwardRef"
+  [component fn-convert]
+  (forward-ref
+   #(create-element
+     component
+     (.assign js/Object
+              (fn-convert %1)
+              #js {:ref %2}))))
+
 (defn- convert-class-name
   "Convert component properties with `className` or `class` which
   will converted to `class-name` kebab-case style."
@@ -78,12 +89,14 @@
         (cond
           (not camel-casing-props?) component
           (emotion? component)      component
-          (html-tag? component)     #(create-element component
-                                                     (object->camel-props %))
+          (html-tag? component)     (create-forwarded-element
+                                     component
+                                     object->camel-props)
           (= class-name-prop
              emotion-class-prop)    component
-          :else                     #(create-element component
-                                                     (convert-class-name % class-name-prop)))]
+          :else                     (create-forwarded-element
+                                     component
+                                     #(convert-class-name % class-name-prop)))]
     (aset wrapper-component "displayName"
           (styled-display-name display-name))
     ((styled-component wrapper-component (->js options))
