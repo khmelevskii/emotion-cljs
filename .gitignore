@@ -2,6 +2,7 @@
 .nrepl-port
 .shadow-cljs
 .target
+.DS_Store
 out
 target
 node_modules
