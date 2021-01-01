@@ -1,4 +1,4 @@
-(defproject emotion-cljs "0.1.2"
+(defproject emotion-cljs "0.1.3"
   :description "ClojureScript wrapper for Emotion."
   :url "https://github.com/khmelevskii/emotion-cljs"
   :license {:name "Eclipse Public License"
