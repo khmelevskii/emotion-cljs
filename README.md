@@ -24,11 +24,11 @@ Emotion is a great CSS-IN-JS solution in JavaScript. emotion-cljs library provid
 ## Documentation
 
 ### Installation
-This library will require `@emotion/core` and `@emotion/styled` from node_modules:
+This library will require `@emotion/react` and `@emotion/styled` from node_modules:
 ```bash
-yarn add @emotion/core @emotion/styled
+yarn add @emotion/react @emotion/styled
 # or
-npm i @emotion/core @emotion/styled
+npm i @emotion/react @emotion/styled
 ```
 
 

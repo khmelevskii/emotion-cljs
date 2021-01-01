@@ -1,6 +1,7 @@
 {:deps  true
  :nrepl {:port 8777}
  :builds
- {:test {:target    :node-test
-         :output-to "out/node-tests.js"
-         :autorun   true}}}
+ {:test {:target           :node-test
+         :output-to        "out/node-tests.js"
+         :compiler-options {:infer-externs true}
+         :autorun          true}}}

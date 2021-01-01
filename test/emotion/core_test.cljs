@@ -138,7 +138,7 @@
 
 (deftest css-when
   (is (= (helpers/render-styles css-when-simple)
-         ".css-gc8rgd{color:yellow;}")
+         ".css-kursji{color:yellow;}")
       "Render defcss-when when prop is false")
 
   (is (= (helpers/render-styles (css-when-simple {:active? true}))
@@ -147,75 +147,75 @@
 
 (deftest styled
   (is (= (helpers/render-component <wrap> {})
-         {:html "<div class=\"css-tokvmb\"></div>"
-          :ids  ["tokvmb"]
-          :css  ".css-tokvmb{color:red;}"})
+         {:html "<div class=\"css-cayl1k\"></div>"
+          :ids  ["cayl1k"]
+          :css  ".css-cayl1k{color:red;}"})
       "Render simple styled component")
 
   (is (= (helpers/render-component <header> {:active? true})
-         {:html "<header class=\"css-o8a063\"></header>"
-          :ids  ["o8a063"]
-          :css  ".css-o8a063{color:red;font-size:12px;line-height:1.6;}.css-o8a063:hover{color:green;}.css-o8a063:focus{color:blue;}"})
+         {:html "<header class=\"css-gejcei\"></header>"
+          :ids  ["gejcei"]
+          :css  ".css-gejcei{color:red;font-size:12px;line-height:1.6;}.css-gejcei:hover{color:green;}.css-gejcei:focus{color:blue;}"})
       "Render active styled header component with styles and css.")
 
   (is (= (helpers/render-component <header> {:active? false})
-         {:html "<header class=\"css-r3ulpn\"></header>"
-          :ids  ["r3ulpn"]
-          :css  ".css-r3ulpn{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-r3ulpn:hover{color:green;}.css-r3ulpn:focus{color:blue;}"})
+         {:html "<header class=\"css-prwpvm\"></header>"
+          :ids  ["prwpvm"]
+          :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
       "Render active styled header component with styles and css.")
 
   (is (= (helpers/render-component <wrap> {:class-name "test-class"})
-         {:html "<div class=\"test-class css-tokvmb\"></div>"
-          :ids  ["tokvmb"]
-          :css  ".css-tokvmb{color:red;}"})
+         {:html "<div class=\"test-class css-cayl1k\"></div>"
+          :ids  ["cayl1k"]
+          :css  ".css-cayl1k{color:red;}"})
       "Render styled component with passing class using `class-name` prop")
 
   (is (= (helpers/render-component <wrap> {:className "test-class"})
-         {:html "<div class=\"test-class css-tokvmb\"></div>"
-          :ids  ["tokvmb"]
-          :css  ".css-tokvmb{color:red;}"})
+         {:html "<div class=\"test-class css-cayl1k\"></div>"
+          :ids  ["cayl1k"]
+          :css  ".css-cayl1k{color:red;}"})
       "Render styled component with passing class using `className` prop")
 
   (is (= (helpers/render-component <wrap> {:class "test-class"})
-         {:html "<div class=\"test-class css-tokvmb\"></div>"
-          :ids  ["tokvmb"]
-          :css  ".css-tokvmb{color:red;}"})
+         {:html "<div class=\"test-class css-cayl1k\"></div>"
+          :ids  ["cayl1k"]
+          :css  ".css-cayl1k{color:red;}"})
       "Render styled component with passing class using `class` prop")
 
   (is (= (helpers/render-component <wrap> {:css {:display :inline}})
-         {:html "<div class=\"css-x06tq5\"></div>"
-          :ids  ["x06tq5"]
-          :css  ".css-x06tq5{color:red;display:inline;}"})
+         {:html "<div class=\"css-tha20r\"></div>"
+          :ids  ["tha20r"]
+          :css  ".css-tha20r{color:red;display:inline;}"})
       "Render styled component with passing styles")
 
   (is (= (helpers/render-component <labeling> {})
-         {:html "<div class=\"css-moghuq-with-label\"></div>"
-          :ids  ["moghuq-with-label"]
-          :css  ".css-moghuq-with-label{color:red;}"})
+         {:html "<div class=\"css-sa4hmd-with-label\"></div>"
+          :ids  ["sa4hmd-with-label"]
+          :css  ".css-sa4hmd-with-label{color:red;}"})
       "Render styled component with passing class labeling")
 
   (is (= (helpers/render-component
           <with-forward>
           {:size    12
            :active? true})
-         {:html "<div class=\"css-0\"></div>"
-          :ids  ["0"]
+         {:html "<div class=\"css-1u8qly9\"></div>"
+          :ids  ["1u8qly9"]
           :css  ""})
       "Render styled component with custom forward prop function")
 
   (is (= (helpers/render-component
           <with-className-prop>
           {})
-         {:html "<div class=\"css-0\"></div>"
-          :ids  ["0"]
+         {:html "<div class=\"css-1u8qly9\"></div>"
+          :ids  ["1u8qly9"]
           :css  ""})
       "Render styled component with className prop")
 
   (is (= (helpers/render-component
           <with-class-prop>
           {})
-         {:html "<div class=\"css-0\"></div>"
-          :ids  ["0"]
+         {:html "<div class=\"css-1u8qly9\"></div>"
+          :ids  ["1u8qly9"]
           :css  ""})
       "Render styled component with class prop")
 
@@ -223,8 +223,8 @@
           <without-camel-casing-props>
           {:autoFocus true
            :className "test"})
-         {:html "<div autofocus=\"\" class=\"test css-0\"></div>"
-          :ids  ["0"]
+         {:html "<div autofocus=\"\" class=\"test css-1u8qly9\"></div>"
+          :ids  ["1u8qly9"]
           :css  ""})
       "Render styled component without camel casing props"))
 
@@ -240,9 +240,9 @@
 
 (deftest def-with-component
   (is (= (helpers/render-component <h1> {})
-         {:html "<h1 class=\"css-r3ulpn\"></h1>"
-          :ids  ["r3ulpn"]
-          :css  ".css-r3ulpn{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-r3ulpn:hover{color:green;}.css-r3ulpn:focus{color:blue;}"})
+         {:html "<h1 class=\"css-prwpvm\"></h1>"
+          :ids  ["prwpvm"]
+          :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
       "Render styled component with change component"))
 
 ;; Global

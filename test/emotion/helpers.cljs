@@ -1,21 +1,21 @@
 (ns emotion.helpers
   (:require
    [cljs-bean.core :refer [->js ->clj]]
-   ["@emotion/core" :as core]
+   ["@emotion/react" :as emotion-react]
    ["@emotion/styled" :as styled]
-   ["@emotion/cache" :as cache]
-   ["create-emotion-server" :as create-emotion-server]
+   ["@emotion/cache" :default create-cache]
+   ["@emotion/server/create-instance" :default create-emotion-server]
    ["react" :as react]
    ["react-dom/server" :as server]))
 
 (defn render-styles [styles]
-  (let [cache'         (.default cache)
-        emotion-server (.default create-emotion-server cache')
+  (let [cache'         (create-cache #js {:key "css"})
+        emotion-server (create-emotion-server cache')
 
         html (.renderToString
               server
               (react/createElement
-               (.-CacheProvider core)
+               (.-CacheProvider emotion-react)
                (->js
                 {:value    cache'
                  :children (react/createElement
@@ -25,13 +25,13 @@
          .-css)))
 
 (defn render-component [component props]
-  (let [cache'         (.default cache)
-        emotion-server (.default create-emotion-server cache')
+  (let [cache'         (create-cache #js {:key "css"})
+        emotion-server (create-emotion-server cache')
 
         html (.renderToString
               server
               (react/createElement
-               (.-CacheProvider core)
+               (.-CacheProvider emotion-react)
                (->js
                 {:value    cache'
                  :children (react/createElement

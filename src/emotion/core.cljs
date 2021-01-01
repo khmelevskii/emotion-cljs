@@ -3,7 +3,7 @@
   (:require
    [cljs-bean.core :refer [->js]]
    ["react" :as react]
-   ["@emotion/core" :as emotion]
+   ["@emotion/react" :as emotion-react]
    ["@emotion/styled" :as styled]
    ["@emotion/is-prop-valid" :as is-prop-valid]
    [emotion.props :as p]
@@ -80,8 +80,9 @@
         (aset acc new-prop-name (aget props prop-name)))
       acc) #js {})))
 
-(defn- create-styled [display-name component options styles]
+(defn- create-styled
   "Create styled component."
+  [display-name component options styles]
   (let [camel-casing-props? (get options "camelCasingProps?" true)
         class-name-prop     (name (get options "classNameProp"
                                        default-class-prop))
@@ -106,12 +107,13 @@
 (defn create-css
   "Create Emotion css."
   [styles]
-  (emotion/css (->js styles)))
+  (emotion-react/css (->js styles)))
 
-(def keyframes emotion/keyframes)
+(def keyframes emotion-react/keyframes)
 
-(defn Global [props]
+(defn Global
   "Add global css."
-  (.render emotion/Global
+  [props]
+  (.render emotion-react/Global
            #js {:styles (.-children props)}))
 (set! (.-displayName Global) "GlobalStyled")
