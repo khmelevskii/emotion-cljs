@@ -73,8 +73,8 @@
     `(def ~sym
        (let [~convert-class-name? (not (html-tag? ~component))
              ~component-wrapper   (if ~convert-class-name?
-                                    #(create-element ~component
-                                                     (convert-class-name %))
+                                    (create-forwarded-element
+                                     ~component convert-class-name)
                                     ~component)]
          (when ~convert-class-name?
            (aset ~component-wrapper "defaultProps"
