@@ -74,10 +74,12 @@
    (.reduce
     (.keys js/Object props)
     (fn [acc prop-name]
-      (let [new-prop-name (if (valid-class-props prop-name)
-                            class-name-prop
-                            prop-name)]
-        (aset acc new-prop-name (aget props prop-name)))
+      (if (valid-class-props prop-name)
+        (aset acc class-name-prop
+              (if-let [current-class-name (aget acc class-name-prop)]
+                (str current-class-name " " (aget props prop-name))
+                (aget props prop-name)))
+        (aset acc prop-name (aget props prop-name)))
       acc) #js {})))
 
 (defn- create-styled
@@ -98,8 +100,9 @@
           :else                     (create-forwarded-element
                                      component
                                      #(convert-class-name % class-name-prop)))]
-    (aset wrapper-component "displayName"
-          (styled-display-name display-name))
+    (when (fn? wrapper-component)
+      (aset wrapper-component "displayName"
+            (styled-display-name display-name)))
     ((styled-component wrapper-component (->js options))
      (fn [props]
        (.concat (->js styles) (.-css props))))))
