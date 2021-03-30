@@ -98,6 +98,7 @@
    "40%"      {:font-size 20}})
 
 (defwithc <h1> <header> :h1)
+(defwithc <h2> <header> <wrap>)
 
 (deftest css
   (is (= (helpers/render-styles css-nil)
@@ -238,12 +239,19 @@
          "@-webkit-keyframes animation-20nvzy{0%,100%{font-size:12px;}40%{font-size:20px;}}@keyframes animation-20nvzy{0%,100%{font-size:12px;}40%{font-size:20px;}}")
       "Render css with using css-let"))
 
-(deftest def-with-component
+(deftest defwithc-test
   (is (= (helpers/render-component <h1> {})
          {:html "<h1 class=\"css-prwpvm\"></h1>"
           :ids  ["prwpvm"]
           :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
-      "Render styled component with change component"))
+      "Render styled component with tag changing"))
+
+(deftest defwithc-with-styled-component-and-custom-class
+  (is (= (helpers/render-component <h2> {:class-name "test-class"})
+         {:html "<div class=\"test-class css-prwpvm css-cayl1k\"></div>"
+          :ids  ["prwpvm" "cayl1k"]
+          :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}.css-cayl1k{color:red;}"})
+      "Render styled component with component changing and adding custom class name"))
 
 (deftest with-component-test
   (is (= (helpers/render-component (with-component <header> :h1) {})
@@ -251,5 +259,12 @@
           :ids  ["prwpvm"]
           :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
       "Render styled component with dynamic changing component using with-component"))
+
+(deftest with-component-test-with-styled-component
+  (is (= (helpers/render-component (with-component <header> <wrap>) {})
+         {:html "<div class=\"css-prwpvm css-cayl1k\"></div>"
+          :ids  ["prwpvm" "cayl1k"]
+          :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}.css-cayl1k{color:red;}"})
+      "Render styled component with dynamic changing component to styled component using with-component"))
 
 ;; Global
