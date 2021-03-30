@@ -4,7 +4,7 @@
    [cljs-bean.core :refer [->clj]]
    [cljs.test :refer [deftest is]]
    [emotion.core :refer [defcss defcss-when defstyled let-css
-                         defkeyframes defwithc Global]]
+                         defkeyframes defwithc with-component]]
    [emotion.helpers :as helpers]))
 
 (def test-component
@@ -244,5 +244,12 @@
           :ids  ["prwpvm"]
           :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
       "Render styled component with change component"))
+
+(deftest with-component-test
+  (is (= (helpers/render-component (with-component <header> :h1) {})
+         {:html "<h1 class=\"css-prwpvm\"></h1>"
+          :ids  ["prwpvm"]
+          :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}"})
+      "Render styled component with dynamic changing component using with-component"))
 
 ;; Global
