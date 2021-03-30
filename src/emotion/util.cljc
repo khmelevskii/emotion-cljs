@@ -2,6 +2,13 @@
   (:require
    [clojure.string :as string]))
 
+(defn convert-component-name
+  "Convert keyworded component name to string."
+  [component-name]
+  (if (keyword? component-name)
+    (name component-name)
+    component-name))
+
 (defn string->camel-case
   "Returns camel case version of the string, e.g. \"font-size\"
   becomes \"fontSize\"."

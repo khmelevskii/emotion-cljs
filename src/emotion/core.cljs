@@ -114,6 +114,23 @@
 
 (def keyframes emotion-react/keyframes)
 
+(defn with-component
+  "Change component/tag in styled component with help of `withComponent`."
+  [styled-component new-component]
+  (let [new-component     (util/convert-component-name new-component)
+        html-tag?         (html-tag? new-component)
+        component-wrapper (create-forwarded-element
+                           new-component
+                           (if html-tag?
+                             object->camel-props
+                             convert-class-name))]
+    (when-not html-tag?
+      (aset component-wrapper "defaultProps"
+            (.-defaultProps new-component))
+      (aset component-wrapper "displayName"
+            (.-displayName new-component)))
+    (.withComponent styled-component component-wrapper)))
+
 (defn Global
   "Add global css."
   [props]
