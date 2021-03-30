@@ -38,7 +38,7 @@
   (let [[component
          options]    (if (sequential? component) component [component])
         component    (util/convert-component-name component)
-        display-name (str component)
+        display-name (str sym)
         options      (util/map->camel-map options)
         styles       (mapv #(if (map? %)
                               (util/map->camel-map %)
@@ -61,7 +61,9 @@
   "Defined new changed component/tag in styled component with
   help of `withComponent`."
   [sym styled-component new-component]
-  `(def ~sym
-     (emotion.core/with-component
-       ~styled-component
-       ~new-component)))
+  (let [display-name (str sym)]
+    `(def ~sym
+       (emotion.core/with-component
+         ~styled-component
+         ~new-component
+         {:display-name ~display-name}))))

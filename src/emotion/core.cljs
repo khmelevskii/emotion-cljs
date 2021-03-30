@@ -28,11 +28,6 @@
   [component]
   (some? (.-__emotion_base component)))
 
-(defn- styled-display-name
-  "Build react displayName for styled components."
-  [name]
-  (str "Styled(" name ")"))
-
 (defn- object->camel-props
   "Convert keys of js object to camel case react props."
   [props]
@@ -57,13 +52,17 @@
 
 (defn- create-forwarded-element
   "Create React component wrapped with React.forwardRef"
-  [component fn-convert]
-  (forward-ref
-   #(create-element
-     component
-     (.assign js/Object
-              (fn-convert %1)
-              #js {:ref %2}))))
+  ([component fn-convert]
+   (create-forwarded-element component fn-convert component))
+  ([component fn-convert display-name]
+   (let [component-wrapper
+         #(create-element
+           component
+           (.assign js/Object
+                    (fn-convert %1)
+                    #js {:ref %2}))]
+     (aset component-wrapper "displayName" display-name)
+     (forward-ref component-wrapper))))
 
 (defn- convert-class-name
   "Convert component properties with `className` or `class` which
@@ -100,9 +99,7 @@
           :else                     (create-forwarded-element
                                      component
                                      #(convert-class-name % class-name-prop)))]
-    (when (fn? wrapper-component)
-      (aset wrapper-component "displayName"
-            (styled-display-name display-name)))
+    (aset wrapper-component "displayName" display-name)
     ((styled-component wrapper-component (->js options))
      (fn [props]
        (.concat (->js styles) (.-css props))))))
@@ -116,20 +113,23 @@
 
 (defn with-component
   "Change component/tag in styled component with help of `withComponent`."
-  [styled-component new-component]
-  (let [new-component     (util/convert-component-name new-component)
-        html-tag?         (html-tag? new-component)
-        component-wrapper (create-forwarded-element
-                           new-component
-                           (if html-tag?
-                             object->camel-props
-                             convert-class-name))]
-    (when-not html-tag?
-      (aset component-wrapper "defaultProps"
-            (.-defaultProps new-component))
-      (aset component-wrapper "displayName"
-            (.-displayName new-component)))
-    (.withComponent styled-component component-wrapper)))
+  ([styled-component new-component]
+   (with-component styled-component new-component nil))
+  ([styled-component new-component {:keys [display-name]}]
+   (let [new-component     (util/convert-component-name new-component)
+         html-tag?         (html-tag? new-component)
+         component-wrapper (create-forwarded-element
+                            new-component
+                            (if html-tag?
+                              object->camel-props
+                              convert-class-name)
+                            display-name)]
+     (when-not html-tag?
+       (aset component-wrapper "defaultProps"
+             (.-defaultProps new-component))
+       (aset component-wrapper "displayName"
+             (or display-name (.-displayName new-component))))
+     (.withComponent styled-component component-wrapper))))
 
 (defn Global
   "Add global css."
