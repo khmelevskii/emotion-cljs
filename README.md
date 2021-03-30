@@ -174,6 +174,19 @@ https://emotion.sh/docs/styled#change-the-rendered-tag-using-withcomponent
 ```
 
 
+### `with-component`
+This function is almost the same as `defwithc` but instead of defining new var this function returns
+new styled component with replaced tag/component. This function can be pretty useful when you need
+to change tag/component in runtime, for example based on some property.
+
+```clojure
+(defstyled Header :h1
+  {:font-size 14})
+
+(with-component Header :div)
+```
+
+
 ### `Global`
 Sometimes you might want to insert global css like resets or font faces. You can use the `Global` macro to do this.
 
