@@ -57,6 +57,43 @@
     `(def ~sym
        (emotion.core/keyframes (cljs-bean.core/->js ~props)))))
 
+(defn- property->media
+  [breakpoints initial-css prop value]
+  (if (sequential? value)
+    (reduce-kv
+     (fn [acc index v]
+       (if (zero? index)
+         (assoc acc prop v)
+         (assoc-in
+          acc [(get breakpoints (dec index)) prop] v)))
+     initial-css
+     value)
+    (assoc initial-css prop value)))
+
+(defn- properties->media
+  [breakpoints initial-css properties]
+  (reduce-kv
+   (fn [acc index v]
+     (if (zero? index)
+       (into acc v)
+       (update acc (get breakpoints (dec index)) merge v)))
+   initial-css
+   properties))
+
+(defmacro defmedia
+  "Create media queries css."
+  [sym breakpoints & props]
+  (let [css (->>
+             props
+             (reduce
+              #(if (sequential? %2)
+                 (properties->media breakpoints %1 %2)
+                 (reduce-kv (partial property->media breakpoints) %1 %2))
+              {})
+             util/map->camel-map)]
+    `(def ~sym
+       (emotion.core/create-css ~css))))
+
 (defmacro defwithc
   "Defined new changed component/tag in styled component with
   help of `withComponent`."
