@@ -62,10 +62,10 @@
   (if (sequential? value)
     (reduce-kv
      (fn [acc index v]
-       (if (zero? index)
-         (assoc acc prop v)
-         (assoc-in
-          acc [(get breakpoints (dec index)) prop] v)))
+       (let [mq (get breakpoints index)]
+         (if (nil? mq)
+           (assoc acc prop v)
+           (assoc-in acc [mq prop] v))))
      initial-css
      value)
     (assoc initial-css prop value)))
@@ -74,9 +74,10 @@
   [breakpoints initial-css properties]
   (reduce-kv
    (fn [acc index v]
-     (if (zero? index)
-       (into acc v)
-       (update acc (get breakpoints (dec index)) merge v)))
+     (let [mq (get breakpoints index)]
+       (if (nil? mq)
+         (into acc v)
+         (update acc mq merge v))))
    initial-css
    properties))
 
