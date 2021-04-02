@@ -1,6 +1,6 @@
 {
     "name": "emotion-cljs",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "author": "Yurii Khmelevskyi <y.khmelevskyi@gmail.com>",
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
