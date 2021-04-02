@@ -157,8 +157,123 @@ https://emotion.sh/docs/keyframes
 
 
 ### `defmedia`
-TODO
+With the help of this macro it's easy to work with media queries. Interface of `defmedia` was inspired by
+facepaint library.
 
+https://github.com/emotion-js/facepaint
+
+```clojure
+(defmedia --responsive-header
+  ["@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:display   :block
+   :color     [:green :blue]
+   :font-size [16 20]})
+```
+
+Output of it will be:
+
+```css
+{
+    display: block;
+
+    '@media(min-width: 420px)': {
+        color: green;
+        font-size: 16px;
+    }
+
+    '@media(min-width: 920px)': {
+        color: green;
+        font-size: 20px;
+    }
+}
+```
+
+`defmedia` also supports using a list of css properties for a breakpoint:
+
+```clojure
+(defmedia --responsive-header
+  ["@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:display :block}
+  [{:color :green
+    :font-size 16}
+   {:color :blue
+    :font-size 20}])
+```
+
+You are able to combine both of these syntaxes.
+
+```clojure
+(defmedia --responsive-header
+  ["@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:display :block
+   :width   ["50%" "75%"]}
+  [{:color :green
+    :font-size 16}
+   {:color :blue
+    :font-size 20}])
+```
+
+Output of it will be:
+
+```css
+{
+    display: block;
+
+    '@media(min-width: 420px)': {
+        color: green;
+        font-size: 16px;
+        width: 50%;
+    }
+
+    '@media(min-width: 920px)': {
+        color: green;
+        font-size: 20px;
+        width: 75%;
+    }
+}
+```
+
+If you prefer using the first element of the list as css properties without media queries, you need
+to pass `nil` as the first element of vector.
+
+```clojure
+(defmedia --responsive-header
+  [nil
+   "@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:width ["25%" "50%" "75%"]}
+  [{:color :red
+    :font-size 12}
+   {:color :green
+    :font-size 16}
+   {:color :blue
+    :font-size 20}])
+```
+
+Output of it will be:
+
+```css
+{
+    width: 25%;
+    color: red;
+    font-size: 12px;
+
+    '@media(min-width: 420px)': {
+        color: green;
+        font-size: 16px;
+        width: 50%;
+    }
+
+    '@media(min-width: 920px)': {
+        color: green;
+        font-size: 20px;
+        width: 75%;
+    }
+}
+```
 
 ### `defwithc`
 With the help of this macro you are able to change tag/component of styled component. Sometimes you want to create
