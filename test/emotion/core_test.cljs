@@ -4,7 +4,8 @@
    [cljs-bean.core :refer [->clj]]
    [cljs.test :refer [deftest is]]
    [emotion.core :refer [defcss defcss-when defstyled let-css
-                         defkeyframes defwithc with-component]]
+                         defkeyframes defwithc with-component
+                         defmedia]]
    [emotion.helpers :as helpers]))
 
 (def test-component
@@ -266,5 +267,39 @@
           :ids  ["prwpvm" "cayl1k"]
           :css  ".css-prwpvm{color:red;font-size:12px;line-height:1.6;color:yellow;}.css-prwpvm:hover{color:green;}.css-prwpvm:focus{color:blue;}.css-cayl1k{color:red;}"})
       "Render styled component with dynamic changing component to styled component using with-component"))
+
+(defmedia media-css
+  ["@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:color [:red :green]}
+  [{:background  :black
+    :font-weight :bold}
+   {:background      :red
+    :text-decoration :underline}]
+  {:font-size [14 16]
+   :display   :block})
+
+(deftest media
+  (is (= (helpers/render-styles media-css)
+         ".css-1u1ywa3{display:block;}@media(min-width: 420px){.css-1u1ywa3{color:red;background:black;font-weight:bold;font-size:14px;}}@media(min-width: 920px){.css-1u1ywa3{color:green;background:red;-webkit-text-decoration:underline;text-decoration:underline;font-size:16px;}}")
+      "Render media queries css with using defmedia"))
+
+(defmedia media-with-nil-css
+  [nil
+   "@media(min-width: 420px)"
+   "@media(min-width: 920px)"]
+  {:color [:blue :red :green]}
+  [{:background :yellow}
+   {:background  :black
+    :font-weight :bold}
+   {:background      :red
+    :text-decoration :underline}]
+  {:font-size [10 14 16]
+   :display   :block})
+
+(deftest media-with-nil
+  (is (= (helpers/render-styles media-with-nil-css)
+         ".css-1x2qh3p{color:blue;background:yellow;font-size:10px;display:block;}@media(min-width: 420px){.css-1x2qh3p{color:red;background:black;font-weight:bold;font-size:14px;}}@media(min-width: 920px){.css-1x2qh3p{color:green;background:red;-webkit-text-decoration:underline;text-decoration:underline;font-size:16px;}}")
+      "Render media queries css with using defmedia and with nil as a first breakpoint"))
 
 ;; Global
