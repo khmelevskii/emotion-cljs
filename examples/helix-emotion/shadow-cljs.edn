@@ -6,8 +6,8 @@
   "node_modules"]
 
  :dependencies
- [[lilactown/helix "0.0.12"]
-  [emotion-cljs "0.1.2"]]
+ [[lilactown/helix "0.0.15"]
+  [emotion-cljs/emotion-cljs "0.1.4"]]
 
  :dev-http {8080 "public"}
  :builds
