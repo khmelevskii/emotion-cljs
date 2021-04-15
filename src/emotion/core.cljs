@@ -84,7 +84,8 @@
 (defn- create-styled
   "Create styled component."
   [display-name component options styles]
-  (let [camel-casing-props? (get options "camelCasingProps?" true)
+  (let [wrap                (get options "wrap")
+        camel-casing-props? (get options "camelCasingProps?" true)
         class-name-prop     (name (get options "classNameProp"
                                        default-class-prop))
         wrapper-component
@@ -100,9 +101,12 @@
                                      component
                                      #(convert-class-name % class-name-prop)))]
     (aset wrapper-component "displayName" display-name)
-    ((styled-component wrapper-component (->js options))
-     (fn [props]
-       (.concat (->js styles) (.-css props))))))
+    (let [result ((styled-component wrapper-component (->js options))
+                  (fn [props]
+                    (.concat (->js styles) (.-css props))))]
+      (if wrap
+        (wrap result)
+        result))))
 
 (defn create-css
   "Create Emotion css."
