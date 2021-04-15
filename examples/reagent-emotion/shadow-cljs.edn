@@ -1,5 +1,12 @@
 ;; shadow-cljs configuration
-{:deps  true
+{:source-paths
+ ["src"
+  "node_modules"]
+
+ :dependencies
+ [[reagent "1.0.0" :exclusions [cljsjs/react cljsjs/react-dom]]
+  [emotion-cljs/emotion-cljs "0.1.5"]]
+
  :dev-http {8080 "public"}
  :builds
  {:frontend
