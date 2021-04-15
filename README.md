@@ -100,6 +100,15 @@ https://emotion.sh/docs/styled#customizing-prop-forwarding
   {})
 ```
 
+#### Wrapping styled components
+In case when you need to wrap styled component, for example, for using in Reagent, you need to wrap native React component in `reagent.core/adapt-react-class`. You can do it with the help of `:wrap` option.
+
+```clojure
+(defstyled button
+  [:div
+   {:wrap reagent.core/adapt-react-class}]
+  {})
+```
 
 ### `defcss`
 It's a way to unite css rules into logic parts, based on component props if it's needed, and combine this parts inside of `defstyled`. 
