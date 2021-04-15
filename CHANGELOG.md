@@ -5,11 +5,11 @@
 ### Added
 
 - Add `:wrap` option to `defstyled` macro
-- Add example with `emotion-cljs` and `reagent` (#5)
+- Add example with `emotion-cljs` and `reagent` ([#5](https://github.com/khmelevskii/emotion-cljs/issues/5))
 
 ### Fixed
 
-- Add `cljs-bean` dependency (#4)
+- Add `cljs-bean` dependency ([#4](https://github.com/khmelevskii/emotion-cljs/issues/4))
 
 ## 0.1.4
 
