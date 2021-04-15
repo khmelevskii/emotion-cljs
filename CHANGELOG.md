@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.5
+
+### Added
+
+- Add `:wrap` option to `defstyled` macro
+- Add example with `emotion-cljs` and `reagent` (#5)
+
+### Fixed
+
+- Add `cljs-bean` dependency (#4)
+
 ## 0.1.4
 
 ### Added
@@ -7,7 +18,7 @@
 - Add `defmedia` macro for working with media queries
 - Add `with-component` function to change tag of styled component in runtime
 
-## Fixed
+### Fixed
 
 - Fix `displayName` of styled components
 - Fix setting additional `class-name` in case when component has `class-name`
