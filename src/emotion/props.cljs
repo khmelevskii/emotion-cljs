@@ -91,6 +91,8 @@
        "on-key-press"
        "on-blur"
        "on-focus"
+       "on-transition-start"
+       "on-transition-end"
        "accent-height"
        "alignment-baseline"
        "allow-reorder"
