@@ -4,15 +4,13 @@
    [cljs-bean.core :refer [->js]]
    ["react" :as react]
    ["@emotion/react" :as emotion-react]
-   ["@emotion/styled" :as styled]
-   ["@emotion/is-prop-valid" :as is-prop-valid]
+   ["@emotion/styled" :default styled]
+   ["@emotion/is-prop-valid" :default prop-valid?]
    [emotion.props :as p]
    [emotion.util :as util]))
 
 (def ^:private create-element react/createElement)
 (def ^:private forward-ref react/forwardRef)
-(def ^:private styled-component (.-default styled))
-(def ^:private prop-valid? (.-default is-prop-valid))
 
 (def ^:private valid-class-props #{"class-name" "className" "class"})
 (def ^:private emotion-class-prop "className")
@@ -102,7 +100,7 @@
                                      component
                                      #(convert-class-name % class-name-prop)))]
     (aset wrapper-component "displayName" display-name)
-    (let [result ((styled-component wrapper-component (->js options))
+    (let [result ((styled wrapper-component (->js options))
                   (fn [props]
                     (.concat (->js styles) (.-css props))))]
       (if wrap
@@ -134,7 +132,8 @@
              (.-defaultProps new-component))
        (aset component-wrapper "displayName"
              (or display-name (.-displayName new-component))))
-     (.withComponent styled-component component-wrapper))))
+     ((aget styled-component "withComponent")
+      component-wrapper))))
 
 (defn Global
   "Add global css."
