@@ -11,8 +11,24 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v2
+
+      - name: List src
+        uses: DeLaGuardo/clojure-lint-action@master
+        with:
+          clj-kondo-args: --lint src test examples
+          check-name: Lint report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
   # This workflow contains a single job called "build-and-test"
   build-and-test:
+    name: Build & Test
+    needs: [lint]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
