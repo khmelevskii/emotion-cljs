@@ -1,4 +1,5 @@
 .cpcache
+.cache
 .nrepl-port
 .shadow-cljs
 .target
