@@ -35,6 +35,7 @@
   {:color :red!important})
 
 (defcss css-with-props-and-conditions
+  #_{:clj-kondo/ignore [:unresolved-symbol]}
   [size active?]
   nil
   {:color :red}

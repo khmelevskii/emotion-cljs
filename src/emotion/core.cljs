@@ -81,6 +81,7 @@
         (aset acc prop-name (aget props prop-name)))
       acc) #js {})))
 
+#_{:clj-kondo/ignore [:unused-private-var]}
 (defn- create-styled
   "Create styled component."
   [display-name component options styles]
