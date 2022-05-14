@@ -4,4 +4,4 @@
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v20.html"}
   :source-paths ["src" "test"]
-  :dependencies [[cljs-bean "1.6.0"]])
+  :dependencies [[cljs-bean "1.8.0"]])
