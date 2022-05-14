@@ -1,0 +1,8 @@
+{:lint-as {emotion.core/defstyled    clojure.core/def
+           emotion.core/defcss       clojure.core/def
+           emotion.core/defcss-when  clojure.core/defn
+           emotion.core/defwithc     clojure.core/def
+           emotion.core/defkeyframes clojure.core/def
+           emotion.core/defmedia     clojure.core/def
+           emotion.core/let-css      clojure.core/let
+           helix.core/defnc          clojure.core/defn}}
