@@ -3,9 +3,9 @@
    ["react" :as react]
    [cljs-bean.core :refer [->clj]]
    [cljs.test :refer [deftest is]]
-   [emotion.core :refer [defcss defcss-when defstyled let-css
-                         defkeyframes defwithc with-component
-                         defmedia]]
+   [emotion.core :refer [defstyled defcss defcss-when
+                         defkeyframes defwithc defmedia with-component]
+    :as n]
    [emotion.helpers :as helpers]))
 
 (def test-component
@@ -17,39 +17,38 @@
     (react/createElement "div"
                          #js {:className (:class (->clj props))})))
 
-(def font-face :sans-serif)
+(def font-face "sans-serif")
 
-(defcss css-nil
+(defcss css-nil []
   nil)
 
-(defcss css-simple
+(defcss css-simple []
   {:color     "red"
    :font-size "1rem"})
 
-(defcss css-with-types
+(defcss css-with-types []
   {:color     :red
    :font-size 14 ;; px
    :font-face font-face})
 
-(defcss css-with-important
+(defcss css-with-important []
   {:color :red!important})
 
-(defcss css-with-props-and-conditions
-  #_{:clj-kondo/ignore [:unresolved-symbol]}
-  [size active?]
+(defcss css-with-props-and-conditions [size active?]
   nil
   {:color :red}
   {:font-size size}
   nil
   (when active?
-    {:color :green}))
+    (n/css
+     {:color :green})))
 
-(defcss css-with-hover-focus
+(defcss css-with-hover-focus []
   {:color   :red
    :&:hover {:color :green}
    :&:focus {:color :blue}})
 
-(defcss css-nested
+(defcss css-nested []
   {:color         :red
    "& .name-test" {:color :blue}})
 
@@ -92,8 +91,8 @@
   {})
 
 (defcss css-with-let []
-  (let-css [size 12]
-    {:font-size size}))
+  (let [size 12]
+    (n/css {:font-size size})))
 
 (defkeyframes animation
   {"0%, 100%" {:font-size 12}
@@ -120,15 +119,17 @@
       "Render simple css with !important")
 
   (is (= (helpers/render-styles css-with-props-and-conditions)
-         ".css-w17a2{color:red;}")
+         ".css-e9ekvq{color:red;}")
       "Render css with props and conditions. Option #1")
 
-  (is (= (helpers/render-styles (css-with-props-and-conditions {:size 12}))
-         ".css-v9w44u{color:red;font-size:12px;}")
+  #_:clj-kondo/ignore
+  (is (= (helpers/render-styles (css-with-props-and-conditions #js {:size 12}))
+         ".css-4b3dll{color:red;font-size:12px;}")
       "Render css with props and conditions. Option #2")
 
-  (is (= (helpers/render-styles (css-with-props-and-conditions {:size 12 :active? true}))
-         ".css-3ctjxa{color:green;font-size:12px;}")
+  #_:clj-kondo/ignore
+  (is (= (helpers/render-styles (css-with-props-and-conditions #js {:size 12 :active? true}))
+         ".css-1je5h8n{color:red;font-size:12px;color:green;}")
       "Render css with props and conditions. Option #3")
 
   (is (= (helpers/render-styles css-with-hover-focus)
@@ -144,7 +145,7 @@
          ".css-kursji{color:yellow;}")
       "Render defcss-when when prop is false")
 
-  (is (= (helpers/render-styles (css-when-simple {:active? true}))
+  (is (= (helpers/render-styles (css-when-simple #js {:active? true}))
          "")
       "Render defcss-when when prop is true"))
 
@@ -233,7 +234,7 @@
 
 (deftest letcss
   (is (= (helpers/render-styles css-with-let)
-         ".css-10sbmph{font-size:12px;}")
+         ".css-1pzcnyu{font-size:12px;}")
       "Render css with using css-let"))
 
 (deftest keyframes
@@ -302,5 +303,3 @@
   (is (= (helpers/render-styles media-with-nil-css)
          ".css-1x2qh3p{color:blue;background:yellow;font-size:10px;display:block;}@media(min-width: 420px){.css-1x2qh3p{color:red;background:black;font-weight:bold;font-size:14px;}}@media(min-width: 920px){.css-1x2qh3p{color:green;background:red;-webkit-text-decoration:underline;text-decoration:underline;font-size:16px;}}")
       "Render media queries css with using defmedia and with nil as a first breakpoint"))
-
-;; Global

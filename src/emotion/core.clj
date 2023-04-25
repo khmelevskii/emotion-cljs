@@ -1,36 +1,60 @@
 (ns emotion.core
   (:require
+   [cljs.tagged-literals]
    [emotion.util :as util]))
+
+(defn ^:private map->js
+  [css]
+  (if (map? css)
+    (util/map->camel-object css)
+    css))
 
 (defmacro defcss
   "Create Emotion css."
-  ([sym css]
-   (let [css (util/map->camel-map css)]
-     `(def ~sym
-        (emotion.core/create-css ~css))))
-  ([sym props & css]
-   (let [props-sym (gensym "props")]
-     `(defn ~sym [~props-sym]
-        (let [{:keys ~props} (cljs-bean.core/->clj ~props-sym )]
-          (-> (conj {} ~@css)
-              util/map->camel-map
-              emotion.core/create-css))))))
+  [sym props & css]
+  (cond
+    ;; when no variables and single css object
+    (and (empty? props)
+         (= (count css) 1)
+         (map? (first css)))
+    (let [res (map->js (first css))]
+      `(def ~sym (emotion.core/create-css ~res)))
+
+    ;; when no params and more then 1 css
+    (and (empty? props)
+         (> (count css) 1))
+    (let [res (cljs.tagged-literals/read-js
+               (mapv map->js css))]
+      `(def ~sym
+         (emotion.core/create-css ~res)))
+    ;; when params and one or more css
+    :else
+    (let [props-sym (gensym "props")
+          props-str (mapv #(str %) props)
+          res       (cljs.tagged-literals/read-js
+                     (mapv map->js css))]
+      `(defn ~sym [~props-sym]
+         (let [~props (mapv #(aget ~props-sym %) ~props-str)]
+           (emotion.core/create-css ~res))))))
 
 (defmacro defcss-when
   "Create Emotion css based on component properties."
   [sym props condition & css]
-  (let [props-sym (gensym "props")]
+  (let [props-sym (gensym "props")
+        props-str (mapv #(str %) props)
+        res       (cljs.tagged-literals/read-js
+                   (mapv map->js css))]
     `(defn ~sym [~props-sym]
-       (let [{:keys ~props} (cljs-bean.core/->clj ~props-sym)]
+       (let [~props (mapv #(aget ~props-sym %)
+                          ~props-str)]
          (when ~condition
-           (-> (mapv #(if (map? %) (util/map->camel-map %) %)
-                     (vector ~@css))
-               emotion.core/create-css))))))
+           (emotion.core/create-css ~res))))))
 
-(defmacro let-css
-  "Helper for define variables inside `defcss`."
-  [params & css]
-  `(let ~params (util/map->camel-map ~@css)))
+(defmacro css
+  "Covert cljs map to valid css object."
+  [css]
+  (let [res (util/map->camel-object css)]
+    `~res))
 
 (defmacro defstyled
   "Create styled component."
@@ -39,11 +63,12 @@
          options]    (if (sequential? component) component [component])
         component    (util/convert-component-name component)
         display-name (str sym)
-        options      (util/map->camel-map options)
-        styles       (mapv #(if (map? %)
-                              (util/map->camel-map %)
-                              %)
-                           styles)]
+        options      (util/map->camel-object options)
+        styles       (cljs.tagged-literals/read-js
+                      (mapv #(if (map? %)
+                               (util/map->camel-object %)
+                               %)
+                            styles))]
     `(def ~sym
        (emotion.core/create-styled ~display-name
                                    ~component
@@ -53,9 +78,9 @@
 (defmacro defkeyframes
   "Create css keyframes."
   [sym props]
-  (let [props (util/map->camel-map props)]
+  (let [props (util/map->camel-object props)]
     `(def ~sym
-       (emotion.core/keyframes (cljs-bean.core/->js ~props)))))
+       (emotion.core/keyframes ~props))))
 
 (defn- property->media
   [breakpoints initial-css prop value]
@@ -91,7 +116,7 @@
                  (properties->media breakpoints %1 %2)
                  (reduce-kv (partial property->media breakpoints) %1 %2))
               {})
-             util/map->camel-map)]
+             util/map->camel-object)]
     `(def ~sym
        (emotion.core/create-css ~css))))
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0
+
+[BREAKING CHANGES]
+
+Optimize performance of almost all function, some code has been transferred from runtime to macro.
+
+### Added
+
+- Add `css` function for styles within conditions
+
+### Fixed
+
+- Remove `let-css` function
+
 ## 0.1.5
 
 ### Added

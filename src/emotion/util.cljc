@@ -1,5 +1,6 @@
 (ns emotion.util
   (:require
+   [cljs.tagged-literals]
    [clojure.string :as string]))
 
 (defn convert-component-name
@@ -39,3 +40,17 @@
              %3))
    {}
    props))
+
+(defn map->camel-object
+  "Convert keys of map to camel case version."
+  [props]
+  (cljs.tagged-literals/read-js
+   (reduce-kv
+    #(assoc %1 (kwd->camel-case %2)
+            (if (map? %3)
+              (map->camel-object %3)
+              (if (keyword? %3)
+                (name %3)
+                %3)))
+    {}
+    props)))

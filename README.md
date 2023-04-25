@@ -144,13 +144,13 @@ this example is an equivalent of
 ```
 
 
-### `let-css`
-This macro is useful in those cases when you need to define local variables inside of `defcss` or `defstyled`.
+### `css`
+This macro need tp use when you need to define styled inside some fuctions, for example `when`, `case`, etc.
 ```clojure
-(defcss checkbox []
-  (let-css [size 12]
-    {:font-size size
-     :border-radius (/ size 4)}))
+(defcss-when checkbox [theme]
+  (case theme
+    "light" (css {:color :green})
+    "dark"  (css {:color :red})))
 ```
 
 

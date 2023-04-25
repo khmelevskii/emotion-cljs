@@ -4,5 +4,4 @@
            emotion.core/defwithc     clojure.core/def
            emotion.core/defkeyframes clojure.core/def
            emotion.core/defmedia     clojure.core/def
-           emotion.core/let-css      clojure.core/let
            helix.core/defnc          clojure.core/defn}}

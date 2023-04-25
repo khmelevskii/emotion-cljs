@@ -1,7 +1,6 @@
 (ns emotion.core
   (:require-macros [emotion.core])
   (:require
-   [cljs-bean.core :refer [->js]]
    ["react" :as react]
    ["@emotion/react" :as emotion-react]
    ["@emotion/styled" :default styled]
@@ -59,7 +58,8 @@
            (.assign js/Object
                     (fn-convert %1)
                     #js {:ref %2}))]
-     (aset component-wrapper "displayName" display-name)
+     (when ^boolean goog/DEBUG
+       (aset component-wrapper "displayName" display-name))
      (forward-ref component-wrapper))))
 
 (defn- convert-class-name
@@ -83,10 +83,15 @@
 (defn- create-styled
   "Create styled component."
   [display-name component options styles]
-  (let [wrap                (get options "wrap")
-        camel-casing-props? (get options "camelCasingProps?" true)
-        class-name-prop     (name (get options "classNameProp"
-                                       default-class-prop))
+  (let [wrap                (aget options "wrap")
+        camel-casing-props? (aget options "camelCasingProps?")
+        camel-casing-props? (if (nil? camel-casing-props?)
+                              true
+                              camel-casing-props?)
+        class-name-prop     (aget options "classNameProp")
+        class-name-prop     (name (if (nil? class-name-prop)
+                                    default-class-prop
+                                    class-name-prop))
         wrapper-component
         (cond
           (not camel-casing-props?) component
@@ -99,18 +104,16 @@
           :else                     (create-forwarded-element
                                      component
                                      #(convert-class-name % class-name-prop)))]
-    (aset wrapper-component "displayName" display-name)
-    (let [result ((styled wrapper-component (->js options))
+    (when ^boolean goog/DEBUG
+      (aset wrapper-component "displayName" display-name))
+    (let [result ((styled wrapper-component options)
                   (fn [props]
-                    (.concat (->js styles) (.-css props))))]
+                    (.concat styles (.-css props))))]
       (if wrap
         (wrap result)
         result))))
 
-(defn create-css
-  "Create Emotion css."
-  [styles]
-  (emotion-react/css (->js styles)))
+(def create-css emotion-react/css)
 
 (def keyframes emotion-react/keyframes)
 
@@ -130,8 +133,9 @@
      (when-not html-tag?
        (aset component-wrapper "defaultProps"
              (.-defaultProps new-component))
-       (aset component-wrapper "displayName"
-             (or display-name (.-displayName new-component))))
+       (when ^boolean goog/DEBUG
+         (aset component-wrapper "displayName"
+               (or display-name (.-displayName new-component)))))
      ((aget styled-component "withComponent")
       component-wrapper))))
 
@@ -140,4 +144,5 @@
   [props]
   (.render emotion-react/Global
            #js {:styles (.-children props)}))
-(set! (.-displayName Global) "GlobalStyled")
+(when ^boolean goog/DEBUG
+  (set! (.-displayName Global) "GlobalStyled"))
