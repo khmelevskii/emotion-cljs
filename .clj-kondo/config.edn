@@ -1,5 +1,5 @@
 {:lint-as {emotion.core/defstyled    clojure.core/def
-           emotion.core/defcss       clojure.core/def
+           emotion.core/defcss       clojure.core/defn
            emotion.core/defcss-when  clojure.core/defn
            emotion.core/defwithc     clojure.core/def
            emotion.core/defkeyframes clojure.core/def
