@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Changed
+
+- By default, in development mode, the namespace is appended to class names.
+
 ## 0.2.0
 
 [BREAKING CHANGES]
