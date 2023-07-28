@@ -77,8 +77,7 @@ And a few examples of using nested css selectors:
 
 
 #### Labels
-Emotion provides a possibility to add a label to the append of css class name. It can be more readable than a hash.
-
+By default, in dev mode, emotion-cljs adds a namespace label for each generated class. If you need, Emotion provides the possibility to add a custom label which will be appended to the CSS class name.
 https://emotion.sh/docs/labels
 ```clojure
 (defstyled Label :div
@@ -145,7 +144,7 @@ this example is an equivalent of
 
 
 ### `css`
-This macro need tp use when you need to define styled inside some fuctions, for example `when`, `case`, etc.
+This macro needs to be used when you need to define styles inside some functions, for example, `when`, `case`, etc.
 ```clojure
 (defcss-when checkbox [theme]
   (case theme
@@ -413,14 +412,19 @@ additional transformations and components wrapping.
   --loading)
 ```
 
+## Performance
+To check the performance of emotion-cljs compared to native emotion-js, you can run npm test. The current results of rendering styles 100,000 times are as follows (Apple M1 Max):
+``` clojure
+Native: 1425.1221660375595
+EmotionCljs: 1704.9198750257492
+```
 
 ## Roadmap
 * Targeting another emotion component. https://emotion.sh/docs/styled#targeting-another-emotion-component
 * Server-side rendering. PR is welcome!
-* Theming? PR is welcome!
 
 
 ## License
-Copyright © 2020 Yurii Khmelevskyi
+Copyright © 2020-2023 Yuri Khmelevsky 🇺🇦
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
