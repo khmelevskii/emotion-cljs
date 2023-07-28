@@ -14,6 +14,8 @@
 emotion-cljs is tiny wrapper for Emotion - performant and flexible CSS-in-JS javascript library.
 emotion-cljs is set of macros for useful bindings to Emotion features with minimal overhead.
 
+Made with ❤️ and supported in [Scope](https://scope.ws/) - modern project management collaborative workspace.
+
 ## Problem
 In JavaScript realm there are popular and convenient approaches for working with CSS, it's `CSS modules` and `CSS-in-JS` libs.
 CSS modules allow to write namespaced CSS and forget about selectors conflicts. CSS-in-JS libs are very popular in `React` ecosystem and
