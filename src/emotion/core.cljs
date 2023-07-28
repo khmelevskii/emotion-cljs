@@ -5,6 +5,7 @@
    ["@emotion/react" :as emotion-react]
    ["@emotion/styled" :default styled]
    ["@emotion/is-prop-valid" :default prop-valid?]
+   [cljs-bean.core]
    [emotion.props :as p]
    [emotion.util :as util]))
 
