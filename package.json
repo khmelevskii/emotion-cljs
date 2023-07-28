@@ -12,15 +12,15 @@
     },
     "homepage": "https://github.com/khmelevskii/emotion-cljs#readme",
     "devDependencies": {
-        "@babel/core": "^7.21.4",
-        "@emotion/cache": "^11.10.6",
-        "@emotion/server": "^11.10.0",
-        "@emotion/css": "^11.10.6",
-        "shadow-cljs": "2.23.2"
+        "@babel/core": "^7.22.9",
+        "@emotion/cache": "^11.11.0",
+        "@emotion/server": "^11.11.0",
+        "@emotion/css": "^11.11.2",
+        "shadow-cljs": "2.25.2"
     },
     "dependencies": {
-        "@emotion/react": "^11.10.6",
-        "@emotion/styled": "^11.10.6",
+        "@emotion/react": "^11.11.1",
+        "@emotion/styled": "^11.11.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     }
