@@ -30,14 +30,8 @@
   [props]
   (.reduce (.keys js/Object props)
            (fn [acc prop-name]
-             (let [new-prop-name (cond
-                                   ;; class props
-                                   (valid-class-props prop-name)
-                                   emotion-class-prop
-                                   ;; camelCase props
-                                   (.includes p/camel-props prop-name)
-                                   (util/string->camel-case prop-name)
-                                   :else prop-name)]
+             (let [new-prop-name (or (aget p/camel-props-map prop-name)
+                                     prop-name)]
                (when (prop-valid? new-prop-name)
                  (let [prop-value (aget props prop-name)
                        prop-value (if (and (= new-prop-name emotion-class-prop)
@@ -82,7 +76,7 @@
 #_{:clj-kondo/ignore [:unused-private-var]}
 (defn- create-styled
   "Create styled component."
-  [display-name component options styles]
+  [display-name component options styles label]
   (let [wrap                (aget options "wrap")
         camel-casing-props? (aget options "camelCasingProps?")
         camel-casing-props? (if (nil? camel-casing-props?)
@@ -92,6 +86,10 @@
         class-name-prop     (name (if (nil? class-name-prop)
                                     default-class-prop
                                     class-name-prop))
+
+        styles (if ^boolean goog/DEBUG
+                 (.concat #js [#js {:label label}] styles)
+                 styles)
         wrapper-component
         (cond
           (not camel-casing-props?) component

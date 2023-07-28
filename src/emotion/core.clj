@@ -1,5 +1,6 @@
 (ns emotion.core
   (:require
+   [clojure.string]
    [cljs.tagged-literals]
    [emotion.util :as util]))
 
@@ -30,23 +31,20 @@
     ;; when params and one or more css
     :else
     (let [props-sym (gensym "props")
-          props-str (mapv #(str %) props)
           res       (cljs.tagged-literals/read-js
                      (mapv map->js css))]
       `(defn ~sym [~props-sym]
-         (let [~props (mapv #(aget ~props-sym %) ~props-str)]
+         (let [{:keys ~props} (cljs-bean.core/->clj ~props-sym)]
            (emotion.core/create-css ~res))))))
 
 (defmacro defcss-when
   "Create Emotion css based on component properties."
   [sym props condition & css]
   (let [props-sym (gensym "props")
-        props-str (mapv #(str %) props)
         res       (cljs.tagged-literals/read-js
                    (mapv map->js css))]
     `(defn ~sym [~props-sym]
-       (let [~props (mapv #(aget ~props-sym %)
-                          ~props-str)]
+       (let [{:keys ~props} (cljs-bean.core/->clj ~props-sym)]
          (when ~condition
            (emotion.core/create-css ~res))))))
 
@@ -63,6 +61,10 @@
          options]    (if (sequential? component) component [component])
         component    (util/convert-component-name component)
         display-name (str sym)
+        label        (str
+                      (clojure.string/replace (str *ns*) #"\." "-")
+                      "-"
+                      (clojure.string/replace display-name #"[<>]" ""))
         options      (util/map->camel-object options)
         styles       (cljs.tagged-literals/read-js
                       (mapv #(if (map? %)
@@ -73,7 +75,8 @@
        (emotion.core/create-styled ~display-name
                                    ~component
                                    ~options
-                                   ~styles))))
+                                   ~styles
+                                   ~label))))
 
 (defmacro defkeyframes
   "Create css keyframes."
