@@ -2,7 +2,7 @@
   (:require
    [reagent.core :as r]
    [emotion.core :refer [defstyled]]
-   ["@material-ui/core/Button" :default muiButton]))
+   ["@mui/material/Button" :default muiButton]))
 
 (defstyled MuiButton
   [muiButton {:class-name-prop :className

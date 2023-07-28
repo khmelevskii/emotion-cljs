@@ -1,7 +1,7 @@
 (ns helix-emotion.app
   (:require
    [shadow.resource :as resource]
-   ["react-dom" :as rdom]
+   ["react-dom/client" :refer [createRoot]]
    [helix.core :refer [$ <>]]
    [helix.experimental.refresh :as refresh]
    [emotion.core :refer [Global]]
@@ -15,10 +15,12 @@
 (defn ^:dev/after-load after-load []
   (refresh/refresh!))
 
-(def root-el (js/document.getElementById "root"))
+(def root (-> (js/document.getElementById "root")
+                 createRoot))
 
 (defn render! []
-  (rdom/render
+  (.render
+   root
    (<>
     ($ Global reset-styles)
     ($ :div
@@ -47,11 +49,10 @@
            :color     "secondary"
            :variant   "contained"
            :onClick   #(js/alert "Secondary MUI")}
-          "Secondary MUI")))
-   root-el))
+          "Secondary MUI")))))
 
-(defn unmount! [dom-el]
-  (rdom/unmountComponentAtNode dom-el))
+(defn unmount! []
+  (.unmount root))
 
 (defn init []
   (render!))
